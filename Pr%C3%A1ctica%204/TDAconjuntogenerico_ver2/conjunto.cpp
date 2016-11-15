@@ -4,12 +4,15 @@
 #include "conjunto.h"
 
 using namespace std;
+conjunto::conjunto( ){
+	vm.clear();	
+}
 
 conjunto::conjunto<T,CMP>(){
 	vm.clear();
 }
 
-conjunto::conjunto(const conjunto<T,CMP> & d) {
+conjunto::conjunto(conjunto & d){
 	this -> vm = (d.getVM());
 }
 
@@ -20,6 +23,7 @@ const vector<mutacion>  & conjunto::getVM(){
 conjunto::iterator  conjunto::find (const conjunto::value_type & s){
 	bool encontrado = false;
 	conjunto::iterator it;
+
 	for(int i = 0; i < vm.size() && !encontrado; i++){
 		if(s == vm[i]){
 			encontrado = true;
@@ -35,6 +39,22 @@ const_iterator  find (const value_type & s) const{
 
 	return it;
 }
+
+size_type count (const value_type & e) const{
+	bool encontrado=false;
+	
+	if( size() > 0 ){ //si hay elementos;
+		for(unsigned int i = 0 ; i < size() && !encontrado ; i++){
+			if( e == vm[i] )
+				encontrado=true;
+		}
+	}
+	if(encontrado)
+		return 1;
+	else
+		return 0;
+}
+
 conjunto::size_type conjunto::count (const string & chr, const unsigned int & pos) const{
 	conjunto::size_type tamanio = 0;
 
@@ -62,29 +82,26 @@ conjunto::size_type conjunto::count (const conjunto::value_type & e) const{
 	return count(e.getChr(), e.getPos());
 }
 
-pair<iterator, bool>  conjunto::insert( const conjunto::value_type& val) {
-	conjunto::iterator it = find(val);
-	pair<conjunto::iterator,bool> par;
-	
-	if(it == vm.end()){
-		vm.insert(it, val);
-		par.first = it;
-		par.second = true;
-	}
-	else{
-		par.first = it;
+pair <conjunto::iterator, bool> conjunto::insert (const conjunto::value_type& val) {
+	pair<conjunto::iterator, bool> par;
+	par.first = find(val);
+
+	if(par.first != vm.end()){
 		par.second = false;
 	}
-	
+	else{
+		par.second = true;
+		vm.push_back(val);
+	}
 
 	return par;
 }
 
-pair<iterator, bool> insert (conjunto::valuetype& val) {
-
+pair <conjunto::iterator, bool> conjunto::insert (conjunto::value_type& val) {
+	return insert(val);
 }
 
-iterator  conjunto::erase (const conjunto::iterator position){
+iterator conjunto::erase (const conjunto::iterator position){
 	vm.erase(position);
 
 	return position;
@@ -99,10 +116,10 @@ size_type conjunto::erase (const value_type& val){
 	*/
 	return 1;
 }
-
 void conjunto::clear(){
 	vm.clear();
 }
+
 
 conjunto::size_type conjunto::size() const {
 	return vm.size();
@@ -199,9 +216,30 @@ conjunto::iterator conjunto::upper_bound (const string & chr, const unsigned int
 
 
 
-conjunto::iterator conjunto::upper_bound (const conjunto::value_type & e){
-	return upper_bound(e.getChr(), e.getPos());
+conjunto::iterator upper_bound (const value_type& val){
+	return upper_bound( val.getChr(), val.getPos() );
 }
+
+const_iterator upper_bound (const value_type& val) const{
+	return uppe_bound( val.getChr(), val.getPos() );
+}
+
+/*functor :conjunto de mutacion creciente por cromosoma/posicion*/
+class comp{
+	
+  public:
+	
+    bool operator()( conjunto::value_type &a , conjunto::value_type &b ){
+	    /*a es mayor que ve si la comparas con su posicion y char.Creo que si pones a < b debería hacer lo mismo
+	    (estaba implementado como opeardor < en mutacion.cpp */
+ 	if( ( a.getChr() < b.getChr() ) && ( a.getPos() < b.getPos() ) ) 
+		return false;
+	else
+		return true;
+	    
+    }
+
+};
 
 bool conjunto::cheq_rep() const{
 	bool invariante = true;
