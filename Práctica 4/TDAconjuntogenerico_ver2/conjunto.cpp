@@ -64,14 +64,14 @@ conjunto::size_type conjunto::count (const conjunto::value_type & e) const{
 }
 
 bool conjunto::insert( const conjunto::value_type & e){
-	pair<conjunto::value_type, bool> par(find(e));
-	bool insertado = par.second;
+	pair<conjunto::value_type, bool> par(find(e)); //conjunto::iterator it = find(val);
+	bool insertado = par.second;			//bool insertado=true; 
 
-	if(!insertado){
-		vm.push_back(e);
-	}
+	if(!insertado){					//if( it == vm.end() ){	//si no es end es porque ya está
+		vm.push_back(e);			// vm.push_back(val);
+	}						// insertado=true;
 
-	return insertado;
+	return insertado;				//return insertado;
 }
 
 iterator  conjunto::erase (const conjunto::iterator position){
