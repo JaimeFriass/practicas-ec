@@ -385,7 +385,7 @@ impar_iterator & operator=(const impar_iterator & x){
 }
 
 
-secure_iterator::secure_iterator() {
+conjunto<T,CMP>::secure_iterator::secure_iterator() {
 	it = NULL;
 	elvector = NULL;
 }
@@ -395,13 +395,13 @@ secure_iterator::secure_iterator(const iterator & x) {
 	elvector = x.elvector;
 }
 
-const T & secure_iterator::operator*() {
+const T & conjunto<T,CMP>::secure_iterator::operator*() {
 	return *it;
 }
 
 // Primero se incrementa y luego si la condicion se cumple
 // no se interrumpe el programa.
-secure_iterator & secure_iterator::operator++() {
+secure_iterator & conjunto<T,CMP>::secure_iterator::operator++() {
 	i++;
 	assert(it > mivector.begin() && it < mivector.end());
 
@@ -411,7 +411,7 @@ secure_iterator & secure_iterator::operator++() {
 // Operador de prefijo, se guarda una copia del iterador actual,
 // se incrementa y devuelve la posición anterior a el incremento al ser
 // prefijo.
-secure_iterator secure_iterator::operator++(int i) {
+secure_iterator conjunto<T,CMP>::secure_iterator::operator++(int i) {
 	secure_iterator aux(*this);
 
 	++(*this);
@@ -419,31 +419,31 @@ secure_iterator secure_iterator::operator++(int i) {
 	return aux;
 }
 
-secure_iterator & secure_iterator::operator--() {
+secure_iterator & conjunto<T,CMP>::secure_iterator::operator--() {
 	i--;
 	assert(it > mivector.begin() && it < mivector.end());
 
 	return *this;
 }
 
-secure_iterator secure_iterator::operator--(int i) {
+secure_iterator conjunto<T,CMP>::secure_iterator::operator--(int i) {
 	secure_iterator aux(*this);
 	++(*this);
 	return aux;
 }
-bool secure_iterator::operator==(const secure_iterator & x) const {
+bool conjunto<T,CMP>::secure_iterator::operator==(const secure_iterator & x) const {
 	if(it.mivector == x.mivector
     	return true;
     else
     	return false;
 }
-bool secure_iterator::operator!=(const secure_iterator & x) const {
+bool conjunto<T,CMP>::secure_iterator::operator!=(const secure_iterator & x) const {
 	if(it.mivector != x.mivector
     	return true;
     else
     	return false;
 }
-secure_iterator & secure_iterator::operator=(const secure_iterator & x) {
+secure_iterator & conjunto<T,CMP>::secure_iterator::operator=(const secure_iterator & x) {
 	if(this != &x){
     	it=x.it;
     	elvector=x.elvector;
